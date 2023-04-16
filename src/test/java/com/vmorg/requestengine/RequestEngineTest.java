@@ -24,7 +24,6 @@ class RequestEngineTest {
     Machine linux;
 
     RequestEngine requestEngine;
-    RequestEngine requestEngineNew;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +32,6 @@ class RequestEngineTest {
         windows = new Desktop("host2020", "Jake", 1, 4, 200, "Windows 10", "hr498");
         linux = new Server("host2021","Mike",4,8,500,"Ubuntu",8,"s83424h","admin.gh");
         requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
-        requestEngineNew = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
     }
 
     @Test
@@ -41,7 +39,6 @@ class RequestEngineTest {
 
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(false);
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
 
         //then
         assertThrows(UserNotEntitledException.class, () -> requestEngine.createNewRequest(windows));
@@ -53,7 +50,6 @@ class RequestEngineTest {
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(true);
         when(systemBuildServiceMock.createNewMachine(windows)).thenReturn("");
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
 
         //then
         assertThrows(MachineNotCreatedException.class, () -> requestEngine.createNewRequest(windows));
@@ -64,7 +60,6 @@ class RequestEngineTest {
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(true);
         when(systemBuildServiceMock.createNewMachine(windows)).thenReturn("");
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
         try {
             requestEngine.createNewRequest(windows);
         }catch (MachineNotCreatedException | UserNotEntitledException e){
@@ -81,7 +76,6 @@ class RequestEngineTest {
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(true);
         when(systemBuildServiceMock.createNewMachine(windows)).thenReturn("Windows");
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
 
         requestEngine.createNewRequest(windows);
 
@@ -96,7 +90,6 @@ class RequestEngineTest {
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(true);
         when(systemBuildServiceMock.createNewMachine(windows)).thenReturn("Windows");
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
 
         requestEngine.createNewRequest(windows);
 
@@ -110,7 +103,6 @@ class RequestEngineTest {
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(true);
         when(systemBuildServiceMock.createNewMachine(windows)).thenReturn("Windows");
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
 
         requestEngine.createNewRequest(windows);
         Map<String,Integer> data = requestEngine.totalBuildsByUserForDay().get(windows.getRequestorName());
@@ -126,7 +118,6 @@ class RequestEngineTest {
         //when
         when(authorisingServiceMock.isAuthorised(windows.getRequestorName())).thenReturn(true);
         when(systemBuildServiceMock.createNewMachine(windows)).thenReturn("Windows");
-        //requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
 
         requestEngine.createNewRequest(windows);
         requestEngine.createNewRequest(windows);
