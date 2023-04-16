@@ -13,9 +13,9 @@ import java.util.Map;
 public class RequestEngine implements VirtualMachineRequestor {
     AuthorisingService authorisingService;
     SystemBuildService systemBuildService;
-    private static int totalFailedBuilds;
+    private int totalFailedBuilds;
 
-    private static Map<String,Map<String,Integer>> totalBuildsByUser = new HashMap<>();
+    private Map<String,Map<String,Integer>> totalBuildsByUser = new HashMap<>();
 
 
 
