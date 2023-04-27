@@ -36,6 +36,9 @@ public class RequestEngine implements VirtualMachineRequestor {
                     if(data.containsKey(machine.toString())){
                         data.put(machine.toString(),data.get(machine.toString())+1);
                         totalBuildsByUser.put(machine.getRequestorName(),data);
+                    } else {
+                        data.put(machine.toString(),1);
+                        totalBuildsByUser.put(machine.getRequestorName(),data);
                     }
                 }else{
                     Map<String,Integer> data = new HashMap<>();

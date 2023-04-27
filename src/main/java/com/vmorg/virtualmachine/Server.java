@@ -1,10 +1,10 @@
 package com.vmorg.virtualmachine;
 
 public class Server extends Machine{
-    private String distroName;
-    private int majorNumberOfDistribution;
-    private String kernelVersion;
-    private String administrativeTeam;
+    private final String distroName;
+    private final int majorNumberOfDistribution;
+    private final String kernelVersion;
+    private final String administrativeTeam;
 
     public Server(String hostname, String requestorName, int numberOfCPUs, int ramSize, int hardDiskSize, String distroName, int majorNumberOfDistribution, String kernelVersion, String administrativeTeam) {
         super(hostname, requestorName, numberOfCPUs, ramSize, hardDiskSize);

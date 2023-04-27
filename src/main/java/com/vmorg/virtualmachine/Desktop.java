@@ -1,8 +1,8 @@
 package com.vmorg.virtualmachine;
 
 public class Desktop extends Machine{
-    private String winVersion;
-    private String buildNumber;
+    private final String winVersion;
+    private final String buildNumber;
 
     public Desktop(String hostname, String requestorName, int numberOfCPUs, int ramSize, int hardDiskSize, String winVersion, String buildNumber) {
         super(hostname, requestorName, numberOfCPUs, ramSize, hardDiskSize);
