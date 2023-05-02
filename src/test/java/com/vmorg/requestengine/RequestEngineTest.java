@@ -9,16 +9,22 @@ import com.vmorg.virtualmachine.Machine;
 import com.vmorg.virtualmachine.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class RequestEngineTest {
+    @Mock
     AuthorisingService authorisingServiceMock;
 
+    @Mock
     SystemBuildService systemBuildServiceMock;
     Machine windows;
     Machine linux;
@@ -27,9 +33,7 @@ class RequestEngineTest {
 
     @BeforeEach
     void setUp() {
-        authorisingServiceMock = mock(AuthorisingService.class);
-        systemBuildServiceMock = mock(SystemBuildService.class);
-        windows = new Desktop("host2020", "Jake", 1, 4, 200, "Windows 10", "hr498");
+        windows = new Desktop("host2020", "Mike", 1, 4, 200, "Windows 10", "hr498");
         linux = new Server("host2021","Mike",4,8,500,"Ubuntu",8,"s83424h","admin.gh");
         requestEngine = new RequestEngine(authorisingServiceMock, systemBuildServiceMock);
     }
@@ -126,5 +130,21 @@ class RequestEngineTest {
         //then
         assertTrue(data.containsKey(windows.toString()));
         assertEquals(2,data.get(windows.toString()));
+    }
+
+    @Test
+    void shouldContainTwoDifferentMachines() throws MachineNotCreatedException, UserNotEntitledException {
+        //when
+        when(authorisingServiceMock.isAuthorised(anyString())).thenReturn(true);
+        when(systemBuildServiceMock.createNewMachine(any(Machine.class))).thenReturn("Windows");
+
+        requestEngine.createNewRequest(windows);
+        requestEngine.createNewRequest(linux);
+        Map<String,Integer> data = requestEngine.totalBuildsByUserForDay().get(windows.getRequestorName());
+
+        //then
+        assertEquals(data.size(),2);
+        assertTrue(data.containsKey(windows.toString()));
+        assertTrue(data.containsKey(linux.toString()));
     }
 }

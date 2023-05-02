@@ -27,27 +27,29 @@ public class RequestEngine implements VirtualMachineRequestor {
     @Override
     public void createNewRequest(Machine machine) throws UserNotEntitledException, MachineNotCreatedException {
         if(authorisingService.isAuthorised(machine.getRequestorName())){
-            if (systemBuildService.createNewMachine(machine).equals("")){
+            if (systemBuildService.createNewMachine(machine).isEmpty()){
                 totalFailedBuilds++;
                 throw new MachineNotCreatedException("Machine creating denied!!!");
             } else {
-                if (totalBuildsByUser.containsKey(machine.getRequestorName())) {
-                    Map<String,Integer> data = totalBuildsByUser.get(machine.getRequestorName());
-                    if(data.containsKey(machine.toString())){
-                        data.put(machine.toString(),data.get(machine.toString())+1);
-                        totalBuildsByUser.put(machine.getRequestorName(),data);
-                    } else {
-                        data.put(machine.toString(),1);
-                        totalBuildsByUser.put(machine.getRequestorName(),data);
-                    }
-                }else{
-                    Map<String,Integer> data = new HashMap<>();
-                    data.put(machine.toString(),1);
-                    totalBuildsByUser.put(machine.getRequestorName(),data);
-                }
+                recordSuccessfulBuild(machine);
             }
         } else {
             throw new UserNotEntitledException("Access Denied!!!!");
+        }
+    }
+
+    private void recordSuccessfulBuild(Machine machine) {
+        if (totalBuildsByUser.containsKey(machine.getRequestorName())) {
+            Map<String,Integer> data = totalBuildsByUser.get(machine.getRequestorName());
+            if(data.containsKey(machine.toString())){
+                data.put(machine.toString(),data.get(machine.toString())+1);
+            } else {
+                data.put(machine.toString(),1);
+            }
+        }else{
+            Map<String,Integer> data = new HashMap<>();
+            data.put(machine.toString(),1);
+            totalBuildsByUser.put(machine.getRequestorName(),data);
         }
     }
 
